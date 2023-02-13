@@ -1,0 +1,16 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+static class Logger
+class View
+class ThreeMFReader
+
+
+
+class ArrayList {
+Object[] elementData
+size()
+}
+
+
+@enduml
