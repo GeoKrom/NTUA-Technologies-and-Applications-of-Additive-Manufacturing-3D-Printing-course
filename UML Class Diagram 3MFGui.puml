@@ -19,8 +19,11 @@ class Application {
 class GuiMetadataReader {
 
     +metadata: dict
+    +getMetadata(metadata: dict): dict
+    +projectMetadata(metadata: dict): list
+    +clicked(qmodelindex): void
     +openWindow(): void
-    +projectMetadata(metadata: dict): void
+
 
 }
 class PluginRegistery {
@@ -39,4 +42,5 @@ MetadataReader <.. GuiMetadataReader: "+metadata" 1
 View <|-- GuiMetadataReader : " +metadata "  1..*
 Extension <|-- GuiMetadataReader
 PluginRegistery --* Application: "+pluginRegistery"  1
+
 @enduml

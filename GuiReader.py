@@ -3,8 +3,9 @@
 
 from Cura.cura import CuraApplication
 from Uranium.UM import  Extension
+import sys
 import os
-from PyQt6.QtCore import Qt, QAbstractItemModel, QModelIndex, QVariant, pyqtProperty, pyqtSignal, pyqtSlot
+from PyQt6.QtWidgets import *
 from Uranium.UM.View import View
 from Uranium.UM.Logger import Logger
 from Uranium.UM.PluginRegistry import PluginRegistry
@@ -22,8 +23,8 @@ class MetadataReader(PluginRegistry):
         self._path_file = path_file
         self._file = os.path.basename(path_file)
 
-    def checkFile(self, file):
-        if not file.endswith(".3mf"):
+    def checkFile(self, _file):
+        if not _file.endswith(".3mf"):
             return False
 
     def readMetadata(self, _metadata: dict) -> dict:
@@ -41,13 +42,37 @@ class GuiMetadataReader(Extension, View):
 
     def __init__(self, metadata: dict) -> None:
         super().__init__()
-        self.metadata = MetadataReader.getMetadata(metadata)
+        self.metadata = MetadataReader.readMetadata(metadata)
 
-    def getMetadata(self, _metadata: dict) -> dict:
-        return _metadata
+    def getMetadata(self, metadata: dict) -> dict:
+        return metadata
+
+    def projectMetadata(self, metadata: dict) -> list:
+        attr_val = []
+
+        for key, attr in enumerate(metadata):
+            attr_val = attr[key]
+        return attr_val
+
+    def clicked(self, qmodelindex):
+        item = self.listWidget.currentItem()
+        print(item.text())
 
     def openWindow(self):
-        pass
 
-    def projectMetadata(self, metadata: dict):
-        pass
+        self.window = QWidget()
+        self.window.resize(500,500)
+        self.window.move(100,100)
+        self.window.setWindowTitle('.3mf File Metadata ')
+        self.layout = QGridLayout()
+        self.listMetadata = GuiMetadataReader.projectMetadata()
+        self.listWidget  = QListWidget()
+
+        for i in range(0,len(self.listMetadata)):
+            self.listWidget.insertItem(i+1, self.listMetadata[i])
+
+        self.listWidget.clicked.connect(self.clicked)
+        self.layout.addWidget(self.listWidget)
+
+
+        self.window.show()
