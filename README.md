@@ -10,5 +10,3 @@ A simple plugin for software Ultimaker CURA.
 George Kassavetakis
 
 [George Krommydas](https://github.com/GeoKrom)
-
-Alex Deligiannidis
