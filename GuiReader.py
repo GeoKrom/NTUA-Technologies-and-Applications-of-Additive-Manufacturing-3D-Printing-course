@@ -7,15 +7,16 @@ import os
 from PyQt6.QtCore import Qt, QAbstractItemModel, QModelIndex, QVariant, pyqtProperty, pyqtSignal, pyqtSlot
 from Uranium.UM.View import View
 from Uranium.UM.Logger import Logger
+from Uranium.UM.PluginRegistry import PluginRegistry
 try:
     from . import ThreeMFReader
     from . import ThreeMFWorkspaceReader
 except ImportError:
     Logger.log("w", "Could not import ThreeMFReader and ThreeMFWorkspaceReader; libSavitar may be missing")
 
-class MetadataReader():
+class MetadataReader(PluginRegistry):
 
-    def __init__(self, metadata, path_file):
+    def __init__(self, _metadata, path_file):
         super().__init__()
         self._metadata = {}
         self._path_file = path_file
@@ -25,20 +26,25 @@ class MetadataReader():
         if not file.endswith(".3mf"):
             return False
 
-    def readMetadata(self, metadata: dict) -> dict:
+    def readMetadata(self, _metadata: dict) -> dict:
 
-        for key, attr in enumerate(metadata):
+        for key, attr in enumerate(_metadata):
             attribute_value = attr[key]
             if attribute_value:
-                self.metadata = attribute_value
+                self._metadata = attribute_value
 
-        return metadata
+        return _metadata
+
+
 
 class GuiMetadataReader(Extension, View):
 
-    def __init__(self, data, metadata: dict) -> None:
+    def __init__(self, metadata: dict) -> None:
         super().__init__()
-        self.metadata = MetadataReader.readMetadata(metadata)
+        self.metadata = MetadataReader.getMetadata(metadata)
+
+    def getMetadata(self, _metadata: dict) -> dict:
+        return _metadata
 
     def openWindow(self):
         pass
