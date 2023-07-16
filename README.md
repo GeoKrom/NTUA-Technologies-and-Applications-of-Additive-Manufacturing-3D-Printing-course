@@ -9,6 +9,6 @@ All rights reserved to Ultimaker.
 
 # Authors
 
-George Kassavetakis
+[George Kassavetakis](https://github.com/Gkassavetakis)
 
 [George Krommydas](https://github.com/GeoKrom)
