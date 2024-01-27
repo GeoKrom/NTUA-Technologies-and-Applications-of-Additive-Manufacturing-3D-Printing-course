@@ -1,0 +1,34 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+actor User
+
+participant View
+participant GuiMetadataReader
+participant MetadataReader
+ref over User, View: initialize window
+
+User -> View: Open Window
+View -> View: Internal call
+activate View
+GuiMetadataReader -> View: openWindow()
+View -> GuiMetadataReader: sendPath(): Send request to load metadata
+activate GuiMetadataReader
+
+MetadataReader <- GuiMetadataReader: sendFile(): Access .3mf file
+activate MetadataReader
+loop
+    MetadataReader -> MetadataReader: readMetadata(): Read all metadata from .3mf file
+end
+
+MetadataReader --> GuiMetadataReader: getMetadata(): Send all metadata
+deactivate MetadataReader
+
+GuiMetadataReader --> View: projectMetadata(): Project metadata in window
+deactivate GuiMetadataReader
+View --> User: Read metadata from .3mf file
+deactivate View
+
+
+
+@enduml
